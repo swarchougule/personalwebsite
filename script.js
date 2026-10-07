@@ -4,11 +4,16 @@ const isMobile = window.matchMedia("(max-width: 760px), (pointer: coarse)").matc
 const canvas = document.querySelector("#sequence-canvas");
 if (canvas) {
   const context = canvas.getContext("2d", { alpha: false });
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
   const logicalFrameCount = 240;
-  const frameStep = isMobile ? 3 : 1;
-  const frameRoot = isMobile ? "./frames-mobile" : "./frames-webp";
-  const maxCachedFrames = isMobile ? 10 : 18;
-  const maxConcurrentLoads = isMobile ? 2 : 4;
+  // The mobile exports were only 640px wide, which made the full-screen
+  // canvas visibly soft on high-density phones. Use the 1280px source set on
+  // every device and reduce the number of requested frames instead.
+  const frameStep = isMobile ? 2 : 1;
+  const frameRoot = "./frames-webp";
+  const maxCachedFrames = isMobile ? 16 : 24;
+  const maxConcurrentLoads = isMobile ? 4 : 6;
 
   const images = new Map();
   const queuedFrames = [];
@@ -36,7 +41,7 @@ if (canvas) {
   }
 
   function resizeCanvas() {
-    const ratio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.5);
+    const ratio = Math.min(window.devicePixelRatio || 1, isMobile ? 2 : 1.5);
     viewportWidth = window.innerWidth;
     viewportHeight = window.innerHeight;
 
@@ -86,6 +91,10 @@ if (canvas) {
   }
 
   function pumpFrameQueue() {
+    // Scroll can add work faster than the network can complete it. Always
+    // load the frames closest to the current target first so fast scrolling
+    // never waits behind an obsolete part of the sequence.
+    queuedFrames.sort((a, b) => Math.abs(a - targetFrame) - Math.abs(b - targetFrame));
     while (loadingSet.size < maxConcurrentLoads && queuedFrames.length) {
       const index = queuedFrames.shift();
       queuedSet.delete(index);
@@ -94,6 +103,7 @@ if (canvas) {
       loadingSet.add(index);
       const image = new Image();
       image.decoding = "async";
+      image.fetchPriority = "high";
       image.onload = () => {
         loadingSet.delete(index);
         images.set(index, image);
@@ -123,8 +133,8 @@ if (canvas) {
 
   function queueFramesAround(index) {
     const center = actualFrameIndex(index);
-    const behind = isMobile ? 1 : 3;
-    const ahead = isMobile ? 8 : 14;
+    const behind = isMobile ? 4 : 5;
+    const ahead = isMobile ? 16 : 24;
 
     queueFrame(center);
     for (let offset = 1; offset <= ahead; offset += 1) queueFrame(center + offset * frameStep);
