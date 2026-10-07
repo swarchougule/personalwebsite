@@ -15,6 +15,19 @@
 @media (max-width:760px) { .section-shell,.site-header { width: min(100% - 36px,600px); } .site-header { top: 10px; } .nav-pill { display: none; } .button-small { margin-left: auto; } .hero { min-height: 90svh; padding-top: 120px; } .hero-copy { width: 100%; } .hero h1 { font-size: clamp(82px,24vw,155px); } .hero h1.hero-title { font-size: clamp(40px, 11.5vw, 66px); line-height: .96; } .hero-note { max-width: 250px; } .hero-note-commercial { max-width: 100%; font-size: 14px; } .hero-side-note { right: auto; bottom: 75px; } .scroll-cue { display: none; } .about,.tools,.services,.process-section,.trust-section,.faq-section,.blog-section { grid-template-columns: 1fr; gap: 35px; padding-top: 110px; } .tools-heading { display: block; } .tools-heading p { margin-top: 24px; } .about-content { padding: 22px; } .display-copy { font-size: 46px; } .body-copy { font-size: 14px; } .tool-grid { gap: 10px; } .tool-badge,.tool-badge:nth-child(5),.tool-badge:nth-child(6),.tool-badge:nth-child(7) { flex-basis: calc(50% - 5px); min-height: 98px; } .tool-icon { width: 54px; height: 54px; } .tool-icon img { width: 44px; height: 44px; } .service-row { grid-template-columns: 28px 1fr 24px; gap: 10px; } .service-row p { display: none; } .glass-panel { padding: 0 16px; } .work { padding-top: 110px; } .work-heading { display: block; } .work-heading h2 { margin-top: 42px; font-size: 82px; text-align: left; } .project-grid { grid-template-columns: 1fr; gap: 48px; } .project-card-offset { transform: none; } .project-art { height: 300px; } .contact { padding-top: 110px; padding-bottom: 120px; } .contact-layout { grid-template-columns: 1fr; gap: 38px; margin-top: 36px; } .contact-content { padding-top: 0; } .contact-content h2 { font-size: 82px; } .booking-card { min-height: 650px; padding: 12px; } #my-cal-inline-15min { height: 590px; } .site-footer { flex-wrap: wrap; gap: 12px; font-size: 9px; } }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior: auto; } .ticker-track { animation: none; } .project-art img { transition: none; } }
 
+/* Services rows keep their visual order even when descriptions sit outside the link. */
+.service-row > span { grid-column: 1; }
+.service-row h3 { grid-column: 2; }
+.service-row p { grid-column: 3; }
+.service-row b { grid-column: 4; }
+
+@media (max-width:760px) {
+  .service-row { grid-template-columns: 28px minmax(0, 1fr) 24px; align-items: center; }
+  .service-row p { display: none; }
+  .service-row b { grid-column: 3; }
+  .service-row h3 { font-size: clamp(32px, 10vw, 46px); line-height: .95; }
+}
+
 .header-actions { display: flex; align-items: center; gap: 16px; }
 .header-socials { display: flex; align-items: center; gap: 8px; }
 .header-socials a { display: grid; width: 25px; height: 25px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); font-family: "Manrope", sans-serif; font-size: 10px; font-weight: 700; transition: color .2s ease, background .2s ease, transform .2s ease; }
