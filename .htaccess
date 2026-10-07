@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Keep one canonical host for search engines and visitors.
+RewriteCond %{HTTP_HOST} ^www\.swarchougule\.in$ [NC]
+RewriteRule ^(.*)$ https://swarchougule.in/$1 [R=301,L]
