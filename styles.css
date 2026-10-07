@@ -720,7 +720,7 @@ body.menu-open {
   border-top: 1px solid var(--line);
   color: var(--muted);
 }
-.footer-col h4 {
+.footer-col h3 {
   margin: 0 0 16px;
   font-family: "DM Mono", monospace;
   font-size: 11px;
